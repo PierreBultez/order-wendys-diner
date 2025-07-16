@@ -34,12 +34,12 @@ Route::get('/carte', function () {
 // Route du dashboard, accessible uniquement aux utilisateurs connectés et vérifiés
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'admin'])->name('dashboard');
 
 
 // ----- NOTRE BLOC DE ROUTES POUR L'ADMINISTRATION -----
 // Ce groupe entier est protégé par les mêmes middlewares que le dashboard.
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     // On préfixe les URLs par '/dashboard' et les noms par 'dashboard.'
     Route::prefix('dashboard')->name('dashboard.')->group(function() {

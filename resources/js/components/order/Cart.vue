@@ -1,3 +1,4 @@
+<!-- Fichier : resources/js/components/order/Cart.vue -->
 <script setup lang="ts">
 import { useCart } from '@/composables/useCart';
 import { Button } from '@/components/ui/button';
@@ -10,9 +11,11 @@ const formatPrice = (price: number) =>
 </script>
 
 <template>
+    <!-- Le conteneur principal du panier est maintenant un flex-col -->
     <div class="flex flex-col h-full">
-        <!-- Liste des articles -->
-        <div class="flex-1 overflow-y-auto pr-2 -mr-2 space-y-4">
+
+        <!-- 1. La liste des articles est dans un conteneur qui grandit et qui scrolle -->
+        <div class="overflow-y-auto space-y-4">
             <div v-for="item in cart" :key="item.product.id" class="flex items-center gap-4">
                 <img v-if="item.product.image_url" :src="item.product.image_url" class="h-16 w-16 rounded-md object-cover">
                 <div v-else class="h-16 w-16 rounded-md bg-gray-200"></div>
@@ -39,8 +42,8 @@ const formatPrice = (price: number) =>
             </div>
         </div>
 
-        <!-- Total et bouton de commande -->
-        <div class="mt-6 border-t border-cafe-noir/10 pt-6">
+        <!-- 2. Le pied du panier (total + bouton) est séparé et fixe en bas DE CETTE SECTION -->
+        <div class="flex-shrink-0 mt-6 border-t border-cafe-noir/10 pt-6">
             <div class="flex justify-between font-bold text-lg">
                 <span>Total</span>
                 <span>{{ formatPrice(totalPrice) }}</span>

@@ -44,7 +44,6 @@ const { addToCart } = useCart();
             <!-- 3. On connecte l'événement @click -->
             <Button class="w-full" @click="() => {
                 addToCart(product);
-                console.log(useCart().cart.value);
             }">
                 <Plus class="mr-2 h-4 w-4" />
                 Ajouter
