@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\OrderController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,6 +31,12 @@ Route::get('/carte', function () {
         'products' => $products
     ]);
 })->name('carte.index');
+
+// NOUVELLE ROUTE POUR PRÉPARER LA COMMANDE
+Route::post('/checkout/prepare', [OrderController::class, 'prepare'])->name('checkout.prepare');
+
+// NOUVELLE ROUTE POUR AFFICHER LA PAGE DE PAIEMENT
+Route::get('/checkout/{revolut_order_id}', [OrderController::class, 'showCheckout'])->name('checkout.show');
 
 // Route du dashboard, accessible uniquement aux utilisateurs connectés et vérifiés
 Route::get('dashboard', function () {

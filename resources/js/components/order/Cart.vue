@@ -3,11 +3,42 @@
 import { useCart } from '@/composables/useCart';
 import { Button } from '@/components/ui/button';
 import { Plus, Minus, Trash2 } from 'lucide-vue-next';
+import axios from 'axios'; // <-- 1. IMPORTER AXIOS
+import { router } from '@inertiajs/vue3'; // <-- 2. IMPORTER LE ROUTEUR INERTIA
+import { ref } from 'vue';
 
 const { cart, totalPrice, incrementQuantity, decrementQuantity, removeFromCart } = useCart();
 
 const formatPrice = (price: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
+
+// 3. GÉRER L'ÉTAT DE CHARGEMENT
+const isProcessing = ref(false);
+
+// 4. CRÉER LA FONCTION DE SOUMISSION
+const handleCheckout = async () => {
+    isProcessing.value = true;
+    try {
+        // On envoie le contenu du panier à notre endpoint
+        const response = await axios.post(route('checkout.prepare'), {
+            cart: cart.value
+        });
+
+        // On récupère le token de Revolut
+        const revolutPublicId = response.data.revolut_public_id;
+
+        // On redirige vers la future page de checkout avec le token
+        router.visit(route('checkout.show', { revolut_order_id: revolutPublicId }));
+
+    } catch (error) {
+        // Gérer les erreurs (par ex. un produit plus dispo)
+        alert('Une erreur est survenue. Veuillez rafraîchir la page.');
+        console.error(error);
+    } finally {
+        isProcessing.value = false;
+    }
+};
+
 </script>
 
 <template>
@@ -48,8 +79,8 @@ const formatPrice = (price: number) =>
                 <span>Total</span>
                 <span>{{ formatPrice(totalPrice) }}</span>
             </div>
-            <Button class="w-full mt-4 text-lg py-6">
-                Valider la commande
+            <Button @click="handleCheckout" :disabled="isProcessing" class="w-full mt-4 text-lg py-6">
+                {{ isProcessing ? 'Préparation...' : 'Valider la commande' }}
             </Button>
         </div>
     </div>

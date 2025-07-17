@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'revolut' => [
+        'secret_key' => env('REVOLUT_SECRET_KEY'),
+        'public_key' => env('REVOLUT_PUBLIC_KEY'),
+        'mode' => env('REVOLUT_MODE', 'production'), // Par défaut en production
+        'base_uri' => env('REVOLUT_MODE') === 'sandbox'
+            ? 'https://sandbox-merchant.revolut.com/api/1.0'
+            : 'https://merchant.revolut.com/api/1.0',
+    ],
+
 ];
